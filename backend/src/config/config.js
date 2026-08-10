@@ -7,5 +7,6 @@ if(!process.env.MONGO_URL){
 
 export const config = {
     PORT: process.env.PORT,
-    MONGO_URL:process.env.MONGO_URL
+    MONGO_URL:process.env.MONGO_URL,
+    JWT_SECRETE:process.env.JWT_SECRETE,
 }
