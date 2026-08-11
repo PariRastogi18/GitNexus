@@ -1,11 +1,11 @@
-import userModel from "../models/userModel";
-import { signUpSchema } from "../validators/auth.validate";
+import userModel from "../models/userModel.js";
+import { signUpSchema } from "../validators/auth.validate.js";
 import httpStatus from "http-status";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import { config } from "../config/config";
-import sessionModel from "../models/sessionModel";
-import crypto from "crypto"
+import { config } from "../config/config.js";
+import sessionModel from "../models/sessionModel.js";
+import crypto from "crypto";
 
 export async function signup(req, res) {
   const result = signUpSchema.safeParse(req.body);
@@ -41,17 +41,44 @@ export async function signup(req, res) {
       { expiresIn: "7d" },
     );
 
-    const refreshTokenHash = crypto.createHash("sha256").update(refreshToken).digest("hex");
+    const refreshTokenHash = crypto
+      .createHash("sha256")
+      .update(refreshToken)
+      .digest("hex");
 
     const session = await sessionModel.create({
-        user: user._id,
-        refreshTokenHash: refreshTokenHash,
-        ip: req.ip,
-        userAgent: req.headers["user-agent"]
-    })
+      user: user._id,
+      refreshTokenHash: refreshTokenHash,
+      ip: req.ip,
+      userAgent: req.headers["user-agent"],
+    });
 
-    res.cookie({
-        
-    })
-  } catch (error) {}
+    const accessToken = jwt.sign(
+      { id: user._id, sessionId: session._id },
+      config.JWT_SECRETE,
+      {
+        expiresIn: "15m",
+      },
+    );
+
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: false,
+      maxAge: 7 * 24 * 60 * 60 * 100,
+      sameSite: "lax",
+    });
+
+    res.status(httpStatus.OK).json({
+      user: {
+        username: user.username,
+        email: user.email,
+      },
+      message: "User sign up successfully",
+      accessToken,
+    });
+  } catch (error) {
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+      message: "Internal server error",
+    });
+  }
 }
