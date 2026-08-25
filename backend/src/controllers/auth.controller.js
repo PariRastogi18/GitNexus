@@ -7,6 +7,13 @@ import { config } from "../config/config.js";
 import sessionModel from "../models/sessionModel.js";
 import crypto from "crypto";
 
+const getCookieOptions = ()=>({
+      httpOnly: true,
+      secure: false,
+      maxAge: 7 * 24 * 60 * 60 * 100,
+      sameSite: "lax",
+})
+
 export async function signup(req, res) {
   const result = signUpSchema.safeParse(req.body);
   if (!result.success) {
@@ -61,12 +68,7 @@ export async function signup(req, res) {
       },
     );
 
-    res.cookie("refreshToken", refreshToken, {
-      httpOnly: true,
-      secure: false,
-      maxAge: 7 * 24 * 60 * 60 * 100,
-      sameSite: "lax",
-    });
+    res.cookie("refreshToken", refreshToken, getCookieOptions);
 
     res.status(httpStatus.OK).json({
       user: {
