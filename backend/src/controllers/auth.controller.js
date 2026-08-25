@@ -7,17 +7,20 @@ import { config } from "../config/config.js";
 import sessionModel from "../models/sessionModel.js";
 import crypto from "crypto";
 
-const getCookieOptions = ()=>({
-      httpOnly: true,
-      secure: false,
-      maxAge: 7 * 24 * 60 * 60 * 100,
-      sameSite: "lax",
-})
+const getCookieOptions = () => ({
+  httpOnly: true,
+  secure: false,
+  maxAge: 7 * 24 * 60 * 60 * 100,
+  sameSite: "lax",
+});
 
 export async function signup(req, res) {
   const result = signUpSchema.safeParse(req.body);
   if (!result.success) {
-    return result.error.issues;
+    return res.status(400).json({
+      message: "Validation failed",
+      errors: result.error.issues,
+    });
   }
 
   try {
