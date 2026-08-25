@@ -70,7 +70,7 @@ export async function signup(req, res) {
 
     res.cookie("refreshToken", refreshToken, getCookieOptions);
 
-    res.status(httpStatus.OK).json({
+    return res.status(httpStatus.OK).json({
       user: {
         username: user.username,
         email: user.email,
@@ -79,7 +79,7 @@ export async function signup(req, res) {
       accessToken,
     });
   } catch (error) {
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+    return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
       message: "Internal server error",
     });
   }
