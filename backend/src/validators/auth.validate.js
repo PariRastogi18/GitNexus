@@ -1,12 +1,16 @@
 import z from "zod";
 
 export const signUpSchema = z.object({
-    username:z.string().min("Username must be 3 character").max("Username cannot exceed 20 character"),
-    email:z.email("Invalid email address"),
-    password:z.string().min("Password must be at least 8 character"),
+  // ✅ Correct — number first, message as second argument
+  username: z
+    .string()
+    .min(3, "Username must be at least 3 characters")
+    .max(20, "Username cannot exceed 20 characters"),
+  email: z.email("Invalid email address"),
+  password: z.string().min(8, "Password must be at least 8 characters"),
 });
 
 export const loginSchema = z.object({
-    email:z.email("Invalid email address"),
-    password:z.string().min("Password must be at least 8 character"),
+  email: z.email("Invalid email address"),
+  password: z.string().min(8, "Password must be at least 8 character"),
 });
