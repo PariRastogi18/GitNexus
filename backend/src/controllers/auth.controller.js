@@ -71,6 +71,8 @@ export async function signup(req, res) {
       },
     );
 
+    console.log(accessToken);
+
     res.cookie("refreshToken", refreshToken, getCookieOptions);
 
     return res.status(httpStatus.OK).json({
@@ -160,6 +162,136 @@ export async function login(req, res) {
     });
   } catch (error) {
     return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+      message: error,
+    });
+  }
+}
+
+export async function getMe(req, res) {
+  try {
+    const { user } = req;
+    const userInfo = await userModel.findById(user.id);
+
+    if (!userInfo) {
+      return res.status(httpStatus.UNAUTHORIZED).json({
+        message: "User not found",
+      });
+    }
+
+    return res.status(httpStatus.OK).json({
+      user: {
+        username: userInfo.username,
+        email: userInfo.email,
+      },
+      message: "User found successfully",
+    });
+  } catch (error) {
+    return res.status(httpOnly.INTERNAL_SERVER_ERROR).json({
+      message: error.message,
+    });
+  }
+}
+export async function refreshAccessToken(req, res) {
+  try {
+    const { refreshToken, user } = req;
+    const userInfo = await userModel.findById(user.id);
+    if (!userInfo) {
+      return res.status(httpStatus.UNAUTHORIZED).json({
+        message: "User not found",
+      });
+    }
+
+    const refreshTokenHash = crypto
+      .createHash("sha256")
+      .update(refreshToken)
+      .digest("hex");
+
+    const session = await sessionModel.findOne({
+      refreshTokenHash,
+      revoke: false,
+    });
+
+    if (!session) {
+      return res.status(httpStatus.UNAUTHORIZED).json({
+        message: "Invalid refresh token",
+      });
+    }
+
+    const accessToken = jwt.sign(
+      {
+        id: userInfo._id,
+        sessionId: session._id,
+      },
+      config.JWT_SECRETE,
+      {
+        expiresIn: "15m",
+      },
+    );
+
+    const newRefreshToken = jwt.sign(
+      {
+        id: userInfo._id,
+      },
+      config.JWT_SECRETE,
+      {
+        expiresIn: "7d",
+      },
+    );
+
+    const newRefreshTokenHash = crypto
+      .createHash("sha256")
+      .update(newRefreshToken)
+      .digest("hex");
+    await sessionModel.findByIdAndUpdate(session._id, {
+      refreshTokenHash: newRefreshTokenHash,
+    });
+
+    res.cookie("refreshToken", newRefreshToken, getCookieOptions);
+
+    return res.status(httpStatus.OK).json({
+      message: "Access token refreshed successfully",
+      accessToken,
+    });
+  } catch (error) {
+    return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+      message: error.message,
+    });
+  }
+}
+
+export async function logout(req, res) {
+  const { refreshToken } = req;
+
+  try {
+    const refreshTokenHash = crypto
+      .createHash("sha256")
+      .update(refreshToken)
+      .digest("hex");
+
+    const session = await sessionModel.findOne({
+      refreshTokenHash,
+      revoke: false,
+    });
+
+    if (!session) {
+      return res.status(httpStatus.UNAUTHORIZED).json({
+        message: "Session not found",
+      });
+    }
+
+    session.revoke = true;
+    await session.save();
+    res.clearCookie("refreshToken", {
+      httpOnly: true,
+      secure: false,
+      sameSite: "lax",
+    });
+
+    return res.status(httpStatus.OK).json({
+      message: "Logout successfully",
+    });
+  } catch (error) {
+    return res.status(httpStatus.UNAUTHORIZED).json({
       message: error,
     });
   }
