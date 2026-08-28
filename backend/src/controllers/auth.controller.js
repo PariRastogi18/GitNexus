@@ -11,7 +11,7 @@ const getCookieOptions = () => ({
   httpOnly: true,
   secure: false,
   maxAge: 7 * 24 * 60 * 60 * 1000,
-  sameSite: "none",
+  sameSite: "lax",
 });
 
 export async function signup(req, res) {
