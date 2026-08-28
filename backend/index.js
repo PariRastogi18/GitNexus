@@ -12,7 +12,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
-const PORT = config.PORT;
+const { PORT } = config;
 
 app.use("/api/auth", authRouter);
 
