@@ -10,8 +10,8 @@ import crypto from "crypto";
 const getCookieOptions = () => ({
   httpOnly: true,
   secure: false,
-  maxAge: 7 * 24 * 60 * 60 * 100,
-  sameSite: "none",
+  maxAge: 7 * 24 * 60 * 60 * 1000,
+  sameSite: "lax",
 });
 
 export async function signup(req, res) {
