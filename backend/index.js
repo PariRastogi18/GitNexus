@@ -31,7 +31,9 @@ yargs(hideBin(process.argv))
         description: "File to add to staging area",
       });
     },
-    add,
+    (argv) => {
+      add(argv.file);
+    },
   )
   .command(
     "commit <message>",
@@ -42,7 +44,9 @@ yargs(hideBin(process.argv))
         description: "Commit massage",
       });
     },
-    commit,
+    (argv) => {
+      commit(argv.message);
+    },
   )
   .command("push", "Push commits to GitNexus", {}, push)
   .command("pull", "Pull commits from GitNexus", {}, pull)
@@ -55,7 +59,9 @@ yargs(hideBin(process.argv))
         description: "Commit Id to revert to",
       });
     },
-    revert,
+    (argv) => {
+      revert(argv.commitId);
+    },
   )
   .demandCommand(1, "You need write at least one command")
   .help().argv;

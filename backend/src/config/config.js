@@ -1,12 +1,14 @@
 import dotenv from "dotenv";
 dotenv.config();
 
-if(!process.env.MONGO_URL){
-    console.log("MONGO_URL is not defined in environmental variable");
+if (!process.env.MONGO_URL) {
+  console.log("MONGO_URL is not defined in environmental variable");
 }
 
 export const config = {
-    PORT: process.env.PORT,
-    MONGO_URL:process.env.MONGO_URL,
-    JWT_SECRETE:process.env.JWT_SECRETE,
-}
+  PORT: process.env.PORT,
+  MONGO_URL: process.env.MONGO_URL,
+  JWT_SECRETE: process.env.JWT_SECRETE,
+  SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,
+  SUPABASE_URL: process.env.SUPABASE_URL,
+};
