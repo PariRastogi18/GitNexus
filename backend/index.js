@@ -13,14 +13,18 @@ import { commit } from "./src/controllers/commit.js";
 import { push } from "./src/controllers/push.js";
 import { pull } from "./src/controllers/pull.js";
 import { revert } from "./src/controllers/revert.js";
+import http, { createServer } from "http";
 
 const app = express();
-
+app.use(cors({ origin: "*" }));
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
+const PORT = config.PORT;
+
 yargs(hideBin(process.argv))
+  .command("start", "server started successfully!", start)
   .command("init", "Initialize a new repository", {}, init)
   .command(
     "add <file>",
@@ -66,11 +70,13 @@ yargs(hideBin(process.argv))
   .demandCommand(1, "You need write at least one command")
   .help().argv;
 
-const { PORT } = config;
-
 app.use("/api/auth", authRouter);
 
-// connectDB();
-// app.listen(PORT, () => {
-//   console.log("Server running on port 5000");
-// });
+function start() {
+  connectDB();
+  app.listen(PORT, () => {
+    console.log("Server running on port 5000");
+  });
+
+  const httpServer = http.createServer(app);
+}
