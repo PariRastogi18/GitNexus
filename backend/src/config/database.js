@@ -5,3 +5,5 @@ export async function connectDB() {
   await mongoose.connect(config.MONGO_URL);
   console.log("Database connected successfully");
 }
+
+export const db = mongoose.connection;

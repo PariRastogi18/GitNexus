@@ -3,7 +3,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import bodyParser from "body-parser";
 import { config } from "./src/config/config.js";
-import { connectDB } from "./src/config/database.js";
+import { connectDB, db } from "./src/config/database.js";
 import authRouter from "./src/routes/auth.routes.js";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
@@ -13,13 +13,18 @@ import { commit } from "./src/controllers/commit.js";
 import { push } from "./src/controllers/push.js";
 import { pull } from "./src/controllers/pull.js";
 import { revert } from "./src/controllers/revert.js";
-import http, { createServer } from "http";
+import http from "http";
+import { Server } from "socket.io";
 
 const app = express();
 app.use(cors({ origin: "*" }));
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
+
+app.get("/", (req, res) => {
+  res.send("Welcome!");
+});
 
 const PORT = config.PORT;
 
@@ -74,9 +79,29 @@ app.use("/api/auth", authRouter);
 
 function start() {
   connectDB();
-  app.listen(PORT, () => {
-    console.log("Server running on port 5000");
+  const user = "test";
+  const httpServer = http.createServer(app);
+  const io = new Server(httpServer, {
+    cors: {
+      origin: "*",
+      methods: ["GET", "POST"],
+    },
+  });
+  io.on("connection", (socket) => {
+    socket.on("joinRoom", (userId) => {
+      user = userId;
+      console.log("===");
+      console.log(user);
+      console.log("===");
+      socket.join(user);
+    });
   });
 
-  const httpServer = http.createServer(app);
+  db.once("open", async () => {
+    console.log("CRUD operations called!");
+  });
+
+  httpServer.listen(PORT, () => {
+    console.log("Server running on port 5000");
+  });
 }
