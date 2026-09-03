@@ -3,12 +3,12 @@ import { getMe, login, logout, refreshAccessToken, signup } from "../controllers
 import { authenticateRefreshToken } from "../middlewares/authenticateRefreshToken.js";
 import { authenticateAccessToken } from "../middlewares/authenticateAccessToken.js";
 
-const router = Router();
+const authRouter = Router();
 
-router.post("/signup", signup);
-router.post("/login", login);
-router.get("/getMe", authenticateAccessToken, getMe);
-router.get("/logout", authenticateRefreshToken, logout);
-router.get("/refreshAccessToken", authenticateRefreshToken, refreshAccessToken);
+authRouter.post("/signup", signup);
+authRouter.post("/login", login);
+authRouter.get("/getMe", authenticateAccessToken, getMe);
+authRouter.get("/logout", authenticateRefreshToken, logout);
+authRouter.get("/refreshAccessToken", authenticateRefreshToken, refreshAccessToken);
 
-export default router;
+export default authRouter;

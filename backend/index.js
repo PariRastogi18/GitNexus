@@ -15,6 +15,7 @@ import { pull } from "./src/controllers/pull.js";
 import { revert } from "./src/controllers/revert.js";
 import http from "http";
 import { Server } from "socket.io";
+import mainRouter from "./src/routes/mainRouter.js";
 
 const app = express();
 app.use(cors({ origin: "*" }));
@@ -22,9 +23,9 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
-app.get("/", (req, res) => {
-  res.send("Welcome!");
-});
+// app.get("/", (req, res) => {
+//   res.send("Welcome!");
+// });
 
 const PORT = config.PORT;
 
@@ -75,7 +76,7 @@ yargs(hideBin(process.argv))
   .demandCommand(1, "You need write at least one command")
   .help().argv;
 
-app.use("/api/auth", authRouter);
+app.use("/api/auth", mainRouter);
 
 function start() {
   connectDB();
