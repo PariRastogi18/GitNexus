@@ -31,7 +31,7 @@ const userSchema = new Schema(
         ref: "User",
       },
     ],
-    StarRepos: [
+    starRepos: [
       {
         type: Schema.Types.ObjectId,
         default: [],

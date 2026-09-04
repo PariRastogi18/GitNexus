@@ -41,6 +41,9 @@ export async function signup(req, res) {
       username,
       email,
       password: hashPassword,
+      repositories: [],
+      followedUser: [],
+      starRepos: [],
     });
 
     const refreshToken = jwt.sign(

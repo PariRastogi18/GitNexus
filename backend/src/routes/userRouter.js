@@ -9,8 +9,8 @@ import {
 const userRouter = Router();
 
 userRouter.get("/allUsers", getAllProfile);
-userRouter.get("/userProfile", getUserProfile);
-userRouter.put("/updateProfile", updateUserProfile);
-userRouter.delete("/deleteUserProfile", deleteUserProfile);
+userRouter.get("/userProfile/:id", getUserProfile);
+userRouter.put("/updateProfile/:id", updateUserProfile);
+userRouter.delete("/deleteUserProfile/:id", deleteUserProfile);
 
 export default userRouter;

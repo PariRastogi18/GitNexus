@@ -1,15 +1,33 @@
-export function getAllProfile(req, res) {
-  res.send("get all user profile!");
+import userModel from "../models/userModel.js";
+import httpStatus from "http-status";
+
+export async function getAllProfile(req, res) {
+  try {
+    const users = await userModel.find({});
+    return res.json(users);
+  } catch (error) {
+    return res.send(httpStatus.INTERNAL_SERVER_ERROR).json({
+      message: error.message,
+    });
+  }
 }
 
-export function getUserProfile(req, res) {
-  res.send("User profile fetch successfully!");
+export async function getUserProfile(req, res) {
+  try {
+    const { id } = req.params;
+    const users = await userModel.findById(id);
+    return res.json(users);
+  } catch (error) {
+    return res.send(httpStatus.INTERNAL_SERVER_ERROR).json({
+      message: error.message,
+    });
+  }
 }
 
-export function updateUserProfile(req, res) {
+export async function updateUserProfile(req, res) {
   res.send("All repository fetch successfully!");
 }
 
-export function deleteUserProfile(req, res) {
+export async function deleteUserProfile(req, res) {
   res.send("Delete user profile successfully!");
 }
