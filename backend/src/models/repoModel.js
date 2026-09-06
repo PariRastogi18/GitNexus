@@ -24,10 +24,12 @@ const repoSchema = new Schema(
       ref: "User",
       required: true,
     },
-    issues: {
-      type: Schema.Types.ObjectId,
-      ref: "Issue",
-    },
+    issues: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Issue",
+      },
+    ],
   },
   {
     timestamps: true,
