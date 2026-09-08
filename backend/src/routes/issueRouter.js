@@ -9,9 +9,9 @@ import {
 
 const issueRouter = Router();
 
-issueRouter.post("/issue/create", createIssue);
-issueRouter.get("/issue/:id", getIssueById);
+issueRouter.post("/issue/create/:id", createIssue);
 issueRouter.get("/issue/all", getAllIssue);
+issueRouter.get("/issue/:id", getIssueById);
 issueRouter.delete("/issue/delete/:id", deleteIssueById);
 issueRouter.put("/issue/update/:id", updateIssueById);
 

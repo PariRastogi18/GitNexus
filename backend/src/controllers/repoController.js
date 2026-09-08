@@ -1,7 +1,6 @@
 import httpStatus from "http-status";
 import repoModel from "../models/repoModel.js";
 import mongoose from "mongoose";
-import userModel from "../models/userModel.js";
 
 export async function createRepository(req, res) {
   try {
@@ -39,7 +38,7 @@ export async function createRepository(req, res) {
 }
 export async function fetchAllRepositories(req, res) {
   try {
-    const allRepo = await repoModel.find({});
+    const allRepo = await repoModel.find({}).populate("owner");
     if (allRepo.length === 0) {
       return res.status(httpStatus.NO_CONTENT).json({
         message: "Repositories not exists",
@@ -55,22 +54,22 @@ export async function fetchAllRepositories(req, res) {
 }
 export async function updateRepositoryById(req, res) {
   try {
-    const { repoId, repoName, content, description, visibility, issues } =
-      req.body;
+    const { id } = req.params;
+    const { repoName, content, description, visibility, issues } = req.body;
     const updatedFields = {};
-    if (repoName) {
+    if (repoName !== undefined) {
       updatedFields.repoName = repoName;
     }
-    if (content) {
+    if (content !== undefined) {
       updatedFields.content = content;
     }
-    if (description) {
+    if (description !== undefined) {
       updatedFields.description = description;
     }
-    if (visibility) {
+    if (visibility !== undefined) {
       updatedFields.visibility = visibility;
     }
-    if (issues) {
+    if (issues !== undefined) {
       updatedFields.issues = issues;
     }
 
@@ -80,10 +79,22 @@ export async function updateRepositoryById(req, res) {
       });
     }
 
-    const repoInfo = await repoModel.findByIdAndUpdate(repoId, updatedFields, {
-      new: true,
-      runValidators: true,
-    });
+    const repoInfo = await repoModel
+      .findByIdAndUpdate({ _id: id }, updatedFields, {
+        new: true,
+        runValidators: true,
+      })
+      .populate("owner");
+
+    if (!repoInfo) {
+      return res.status(httpStatus.NOT_FOUND).json({
+        message: "Repository not found!",
+      });
+    }
+
+    return res
+      .status(httpStatus.OK)
+      .json({ repoInfo, message: "Repository updated successfully!" });
   } catch (error) {
     return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
       message: error.message,
@@ -93,7 +104,7 @@ export async function updateRepositoryById(req, res) {
 export async function deleteRepositoryById(req, res) {
   try {
     const { id } = req.params;
-    const repoInfo = await repoModel.findByIdAndDelete(id);
+    const repoInfo = await repoModel.findByIdAndDelete({ _id: id });
     return res.status(httpStatus.OK).json({
       message: "Repository deleted successfully!",
       repoName: repoInfo.repoName,
@@ -106,9 +117,11 @@ export async function deleteRepositoryById(req, res) {
 }
 export async function fetchRepositoryByName(req, res) {
   try {
-    const { repoName } = req.params;
+    const { name } = req.params;
 
-    const repoInfo = await repoModel.findOne(repoName);
+    const repoInfo = await repoModel
+      .findOne({ repoName: name })
+      .populate("owner");
 
     if (!repoInfo) {
       return res.status(httpStatus.NOT_FOUND).json({
@@ -127,7 +140,7 @@ export async function fetchRepositoryById(req, res) {
   try {
     const { id } = req.params;
 
-    const repoInfo = await repoModel.findOne(id);
+    const repoInfo = await repoModel.findById(id).populate("owner");
 
     if (!repoInfo) {
       return res.status(httpStatus.NOT_FOUND).json({
@@ -145,24 +158,16 @@ export async function fetchRepositoryById(req, res) {
 export async function toggleVisibility(req, res) {
   try {
     const { id } = req.params;
-    const { visibility } = req.body;
-    const isVis = visibility === true ? false : true;
-    const repoInfo = await repoModel.findOneAndUpdate(
-      id,
-      {
-        visibility: isVis,
-      },
-      {
-        new: true,
-        runValidators: true,
-      },
-    );
+    const repoInfo = await repoModel.findById(id);
 
     if (!repoInfo) {
       return res.status(httpStatus.NOT_FOUND).json({
         message: "Repository not found!",
       });
     }
+
+    repoInfo.visibility = !repoInfo.visibility;
+    await repoInfo.save();
 
     return res
       .status(httpStatus.OK)
@@ -177,15 +182,9 @@ export async function fetchCurrentUserRepository(req, res) {
   try {
     const { userId } = req.params;
 
-    const user = await userModel.findById(userId);
+    const repoInfo = await repoModel.find({ owner: userId });
 
-    if (!user) {
-      return res.status(httpStatus.NOT_FOUND).json({
-        message: "User not found!",
-      });
-    }
-
-    if (user.repositories.length === 0) {
+    if (repoInfo.length === 0) {
       return res.status(httpStatus.NO_CONTENT).json({
         message: "Repositories not available!",
       });
@@ -193,7 +192,7 @@ export async function fetchCurrentUserRepository(req, res) {
 
     return res.status(httpStatus.OK).json({
       message: "All user repositories fetched successfully!",
-      userRepos: user.repositories,
+      userRepos: repoInfo,
     });
   } catch (error) {
     return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
