@@ -15,8 +15,8 @@ const SignIn = () => {
     <div className="min-h-screen bg-white flex items-center justify-center px-4 py-10 relative overflow-hidden">
       {" "}
       {/* Background Decorations */}{" "}
-      <div className="absolute top-[-100px] left-[-100px] w-72 h-72 bg-pink-100 rounded-full blur-3xl opacity-70"></div>{" "}
-      <div className="absolute bottom-[-120px] right-[-80px] w-80 h-80 bg-pink-200 rounded-full blur-3xl opacity-50"></div>{" "}
+      <div className="absolute top-25 left-25 w-72 h-72 bg-pink-100 rounded-full blur-3xl opacity-70"></div>{" "}
+      <div className="absolute bottom-30 right-20 w-80 h-80 bg-pink-200 rounded-full blur-3xl opacity-50"></div>{" "}
       {/* Git Branch Decorations */}{" "}
       <div className="absolute top-20 left-10 text-pink-200 hidden lg:block">
         {" "}

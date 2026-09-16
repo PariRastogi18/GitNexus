@@ -296,7 +296,7 @@ const Dashboard = () => {
               {/* Contribution Grid */}{" "}
               <div className="overflow-x-auto">
                 {" "}
-                <div className="min-w-[650px]">
+                <div className="min-w-162.5">
                   {" "}
                   {/* Months */}{" "}
                   <div className="flex ml-7 mb-2 text-xs text-gray-400">
