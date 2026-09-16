@@ -9,7 +9,7 @@ import {
 
 const AuthContext = createContext();
 
-export default function AuthProvider({ children }) {
+export function AuthProvider({ children }) {
   const BACKEND_URL = import.meta.env.BACKEND_URL;
   const [isAuthenticate, setIsAuthenticate] = useState(false);
   const [accessToken, setAccessToken] = useState(null);
@@ -52,7 +52,7 @@ export default function AuthProvider({ children }) {
       }
     } catch (error) {
       setAccessToken(null);
-      isAuthenticate(false);
+      setIsAuthenticate(false);
       setUser(null);
       throw new Error("Error: ", error.message);
     } finally {
