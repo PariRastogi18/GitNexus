@@ -44,17 +44,17 @@ export function AuthProvider({ children }) {
         const data = await response.json();
         console.log("Verified user: ", data);
         setUser(data.user || data);
-        isAuthenticate(true);
+        setIsAuthenticate(true);
       } else {
         setAccessToken(null);
-        isAuthenticate(false);
+        setIsAuthenticate(false);
         setUser(null);
       }
     } catch (error) {
       setAccessToken(null);
       setIsAuthenticate(false);
       setUser(null);
-      throw new Error("Error: ", error.message);
+      throw new Error("Error: " + error.message);
     } finally {
       setLoading(false);
     }
