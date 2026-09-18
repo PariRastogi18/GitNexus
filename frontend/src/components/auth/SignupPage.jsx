@@ -1,8 +1,12 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff, GitBranch } from "lucide-react";
+import { useAuth } from "../context/AuthContext.jsx";
 
 const Signup = () => {
+  const navigate = useNavigate();
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+  const { login } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -18,8 +22,33 @@ const Signup = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    try {
+      const response = await fetch(`${BACKEND_URL}/signup`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: formData.username,
+          email: formData.email,
+          password: formData.password,
+        }),
+        credentials: "include",
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        login(data.accessToken, data.user);
+        navigate("/dashboard");
+      } else {
+        navigate("/signup");
+      }
+    } catch (error) {
+      console.error("Signup error: ", error.message);
+    }
 
     console.log(formData);
   };
