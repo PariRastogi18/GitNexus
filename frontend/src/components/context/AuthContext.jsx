@@ -10,7 +10,7 @@ import {
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-  const BACKEND_URL = import.meta.env.BACKEND_URL;
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
   const [isAuthenticate, setIsAuthenticate] = useState(false);
   const [accessToken, setAccessToken] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -35,7 +35,7 @@ export function AuthProvider({ children }) {
       const response = await fetch(`${BACKEND_URL}/getMe`, {
         method: "GET",
         headers: {
-          Application: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${accessToken}`,
         },
         credentials: "include",
       });

@@ -49,8 +49,6 @@ const Signup = () => {
     } catch (error) {
       console.error("Signup error: ", error.message);
     }
-
-    console.log(formData);
   };
 
   return (

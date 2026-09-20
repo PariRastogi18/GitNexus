@@ -18,6 +18,8 @@ import {
   Users,
 } from "lucide-react";
 import { useState } from "react";
+import LogoutButton from "../utils/Logout.jsx";
+
 const Dashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const repositories = [
@@ -105,6 +107,7 @@ const Dashboard = () => {
             </div>{" "}
             <ChevronDown size={16} className="text-gray-400" />{" "}
           </button>{" "}
+          <LogoutButton />
         </div>{" "}
       </header>{" "}
       {/* ================= MAIN ================= */}{" "}

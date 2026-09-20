@@ -13,7 +13,10 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path="/signup" element={<Signup />} />
+        <Route
+          path="/signup"
+          element={isAuthenticate ? <Dashboard /> : <Signup />}
+        />
         <Route
           path="/dashboard"
           element={

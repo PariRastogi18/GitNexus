@@ -74,8 +74,6 @@ export async function signup(req, res) {
       },
     );
 
-    console.log(accessToken);
-
     res.cookie("refreshToken", refreshToken, getCookieOptions);
 
     return res.status(httpStatus.OK).json({
