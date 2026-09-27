@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 const LogoutButton = () => {
   const { logout } = useAuth();
   const navigate = useNavigate();
-  const BACKEND_URL = import.meta.env.VITA_BACKEND_URL;
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
   const handleLogout = async () => {
     try {
@@ -26,27 +26,10 @@ const LogoutButton = () => {
     <button
       onClick={handleLogout}
       className="
-        w-full
-        flex
-        items-center
-        gap-3
-        px-4
-        py-3
-        rounded-xl
-        text-sm
-        font-medium
-        text-red-500
-        bg-white
-        hover:bg-red-50
-        hover:text-red-600
-        border
-        border-transparent
-        hover:border-red-100
-        transition-all
-        duration-200
+        w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-red-400 hover:bg-zinc-900 cursor-pointer
       "
     >
-      <LogOut size={19} />
+      <LogOut size={17} />
 
       <span>Logout</span>
     </button>

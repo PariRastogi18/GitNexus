@@ -4,6 +4,7 @@ import {
   deleteRepositoryById,
   fetchAllRepositories,
   fetchCurrentUserRepository,
+  fetchLimitCurrentUserRepository,
   fetchRepositoryById,
   fetchRepositoryByName,
   toggleVisibility,
@@ -19,6 +20,7 @@ repoRouter.delete("/repo/delete/:id", deleteRepositoryById);
 repoRouter.get("/repo/name/:name", fetchRepositoryByName);
 repoRouter.get("/repo/:id", fetchRepositoryById);
 repoRouter.get("/repo/user/:userId", fetchCurrentUserRepository);
+repoRouter.get("/repo/user/limit/:userId", fetchLimitCurrentUserRepository);
 repoRouter.patch("/repo/toggle/:id", toggleVisibility);
 
 export default repoRouter;

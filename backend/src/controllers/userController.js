@@ -1,6 +1,5 @@
 import userModel from "../models/userModel.js";
 import httpStatus from "http-status";
-import bcrypt from "bcrypt";
 
 export async function getAllProfile(req, res) {
   try {
@@ -28,15 +27,29 @@ export async function getUserProfile(req, res) {
 export async function updateUserProfile(req, res) {
   try {
     const { id } = req.params;
-    const { email, password } = req.body;
+    const { name, username, bio, email, location, website, profilePicture } = req.body;
     const updatedFields = {};
 
     if (email) {
       updatedFields.email = email;
     }
-
-    if (password) {
-      updatedFields.password = await bcrypt.hash(password, 10);
+    if (name) {
+      updatedFields.name = name;
+    }
+    if (username) {
+      updatedFields.username = username;
+    }
+    if (bio) {
+      updatedFields.bio = bio;
+    }
+    if (location) {
+      updatedFields.location = location;
+    }
+    if (website) {
+      updatedFields.website = website;
+    }
+    if (profilePicture) {
+      updatedFields.profilePicture = profilePicture;
     }
 
     if (Object.keys(updatedFields).length === 0) {

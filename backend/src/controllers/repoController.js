@@ -200,3 +200,28 @@ export async function fetchCurrentUserRepository(req, res) {
     });
   }
 }
+export async function fetchLimitCurrentUserRepository(req, res) {
+  try {
+    const { userId } = req.params;
+
+    const repoInfo = await repoModel
+      .find({ owner: userId })
+      .limit(4)
+      .sort({ createdAt: -1 });
+
+    if (repoInfo.length === 0) {
+      return res.status(httpStatus.NO_CONTENT).json({
+        message: "Repositories not available!",
+      });
+    }
+
+    return res.status(httpStatus.OK).json({
+      message: "All user repositories fetched successfully!",
+      userRepos: repoInfo,
+    });
+  } catch (error) {
+    return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+      message: error.message,
+    });
+  }
+}

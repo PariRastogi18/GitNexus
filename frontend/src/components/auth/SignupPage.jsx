@@ -42,7 +42,7 @@ const Signup = () => {
       const data = await response.json();
       if (response.ok) {
         login(data.accessToken, data.user);
-        navigate("/dashboard");
+        navigate("/");
       } else {
         navigate("/signup");
       }
@@ -298,7 +298,7 @@ const Signup = () => {
           <p className="text-center text-sm text-gray-500 mt-7">
             Already have an account?{" "}
             <Link
-              to="/login"
+              to="/signin"
               className="
                 text-pink-500
                 font-semibold

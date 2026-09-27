@@ -78,6 +78,7 @@ export async function signup(req, res) {
 
     return res.status(httpStatus.OK).json({
       user: {
+        userId:user._id,
         username: user.username,
         email: user.email,
       },
@@ -155,6 +156,7 @@ export async function login(req, res) {
 
     return res.status(httpStatus.OK).json({
       user: {
+        userId:user._id,
         username: user.username,
         email: user.email,
       },
@@ -181,6 +183,7 @@ export async function getMe(req, res) {
 
     return res.status(httpStatus.OK).json({
       user: {
+        userId:userInfo._id,
         username: userInfo.username,
         email: userInfo.email,
       },
@@ -286,6 +289,7 @@ export async function logout(req, res) {
       httpOnly: true,
       secure: false,
       sameSite: "lax",
+      path: "/",
     });
 
     return res.status(httpStatus.OK).json({

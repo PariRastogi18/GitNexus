@@ -2,6 +2,11 @@ import mongoose from "mongoose";
 import { Schema } from "mongoose";
 const userSchema = new Schema(
   {
+    name: {
+      type: String,
+      trim: true,
+      default: "",
+    },
     username: {
       type: String,
       required: [true, "Username is required"],
@@ -38,6 +43,24 @@ const userSchema = new Schema(
         ref: "Repository",
       },
     ],
+    profilePicture: {
+      type: String,
+      default: "",
+    },
+    bio: {
+      type: String,
+      default: "",
+    },
+
+    location: {
+      type: String,
+      default: "",
+    },
+
+    website: {
+      type: String,
+      default: "",
+    },
   },
   {
     timestamps: true,
