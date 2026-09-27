@@ -243,7 +243,7 @@ const Dashboard = () => {
           </div>
 
           <div className="overflow-x-auto">
-            <div className="min-w-[700px]">
+            <div className="min-w-175">
               <div className="flex gap-1">
                 {Array.from({ length: 52 }).map((_, week) => (
                   <div key={week} className="flex flex-col gap-1">
