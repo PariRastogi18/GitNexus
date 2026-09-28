@@ -78,7 +78,7 @@ export async function signup(req, res) {
 
     return res.status(httpStatus.OK).json({
       user: {
-        userId:user._id,
+        userId: user._id,
         username: user.username,
         email: user.email,
       },
@@ -156,7 +156,7 @@ export async function login(req, res) {
 
     return res.status(httpStatus.OK).json({
       user: {
-        userId:user._id,
+        userId: user._id,
         username: user.username,
         email: user.email,
       },
@@ -183,9 +183,14 @@ export async function getMe(req, res) {
 
     return res.status(httpStatus.OK).json({
       user: {
-        userId:userInfo._id,
+        userId: userInfo._id,
         username: userInfo.username,
         email: userInfo.email,
+        name: userInfo.name,
+        bio: userInfo.bio,
+        location: userInfo.location,
+        website: userInfo.website,
+        profilePicture: userInfo.profilePicture,
       },
       message: "User found successfully",
     });

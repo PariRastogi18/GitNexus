@@ -1,3 +1,4 @@
+import cloudinary from "../config/cloudinary.js";
 import userModel from "../models/userModel.js";
 import httpStatus from "http-status";
 
@@ -25,31 +26,45 @@ export async function getUserProfile(req, res) {
 }
 
 export async function updateUserProfile(req, res) {
+  const { id } = req.params;
   try {
-    const { id } = req.params;
-    const { name, username, bio, email, location, website, profilePicture } = req.body;
+    const editableFields = [
+      "name",
+      "username",
+      "bio",
+      "email",
+      "location",
+      "website",
+    ];
     const updatedFields = {};
 
-    if (email) {
-      updatedFields.email = email;
+    for (const field of editableFields) {
+      if (Object.prototype.hasOwnProperty.call(req.body, field)) {
+        updatedFields[field] = req.body[field];
+      }
     }
-    if (name) {
-      updatedFields.name = name;
+
+    const existingUser = await userModel.findById(id);
+    if (!existingUser) {
+      return res
+        .status(httpStatus.NOT_FOUND)
+        .json({ message: "User not found" });
     }
-    if (username) {
-      updatedFields.username = username;
-    }
-    if (bio) {
-      updatedFields.bio = bio;
-    }
-    if (location) {
-      updatedFields.location = location;
-    }
-    if (website) {
-      updatedFields.website = website;
-    }
-    if (profilePicture) {
-      updatedFields.profilePicture = profilePicture;
+
+    if (req.file) {
+      const result = await new Promise((resolve, reject) => {
+        cloudinary.uploader
+          .upload_stream(
+            { folder: "gitNexus/profile-picture" },
+            (error, uploadResult) => {
+              if (error) reject(error);
+              else resolve(uploadResult);
+            },
+          )
+          .end(req.file.buffer);
+      });
+
+      updatedFields.profilePicture = result.secure_url;
     }
 
     if (Object.keys(updatedFields).length === 0) {
@@ -59,17 +74,8 @@ export async function updateUserProfile(req, res) {
     }
 
     const user = await userModel
-      .findByIdAndUpdate(id, updatedFields, {
-        new: true,
-        runValidators: true,
-      })
+      .findByIdAndUpdate(id, updatedFields, { new: true, runValidators: true })
       .select("-password");
-
-    if (!user) {
-      return res.status(httpStatus.NOT_FOUND).json({
-        message: "User not found",
-      });
-    }
 
     return res.status(httpStatus.OK).json({
       message: "User profile updated successfully",

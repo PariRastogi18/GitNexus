@@ -12,10 +12,12 @@ import {
   Edit,
 } from "lucide-react";
 import { Link } from "react-router-dom";
-import GitNexusIcon from "../dashboard/GitNexusIcon";
-import ProfileIcon from "../dashboard/ProfileIcon";
+import GitNexusIcon from "../dashboard/GitNexusIcon.jsx";
+import ProfileIcon from "../dashboard/ProfileIcon.jsx";
+import { useAuth } from "../context/AuthContext.jsx";
 
 const Profile = () => {
+  const { user } = useAuth();
   const repositories = [
     {
       name: "GitNexus",
@@ -50,7 +52,7 @@ const Profile = () => {
   return (
     <div className="min-h-screen bg-black text-white">
       <header className="h-16 border-b border-zinc-800 flex items-center px-5 md:px-8">
-        <GitNexusIcon/>
+        <GitNexusIcon />
 
         <div className="ml-auto flex items-center gap-3">
           <Link
@@ -60,7 +62,7 @@ const Profile = () => {
             Repositories
           </Link>
 
-          <ProfileIcon/>
+          <ProfileIcon />
         </div>
       </header>
 
@@ -69,34 +71,45 @@ const Profile = () => {
           <aside className="w-full md:w-72">
             <div className="flex md:block items-center gap-5">
               <div className="w-28 h-28 md:w-40 md:h-40 rounded-full bg-pink-500 flex items-center justify-center text-4xl md:text-5xl font-bold">
-                P
+                {!user.profilePicture ? (
+                  user.name[0].toUpperCase()
+                ) : (
+                  <img
+                    src={user.profilePicture}
+                    alt={user.name}
+                    className="w-40 h-40 rounded-full object-cover"
+                  />
+                )}
               </div>
 
               <div className="md:mt-5">
-                <h2 className="text-2xl font-bold">Pari Rastogi</h2>
+                <h2 className="text-2xl font-bold">{user.name}</h2>
 
-                <p className="text-zinc-500">pari-rastogi</p>
+                <p className="text-zinc-500">{user.username}</p>
               </div>
             </div>
 
-            <Link className="w-full mt-6 py-2.5 border border-zinc-700 rounded-lg text-sm font-semibold hover:bg-zinc-900 transition flex items-center justify-center gap-2" to={"/edit"}>
+            <Link
+              className="w-full mt-6 py-2.5 border border-zinc-700 rounded-lg text-sm font-semibold hover:bg-zinc-900 transition flex items-center justify-center gap-2"
+              to={"/edit"}
+            >
               <Edit size={16} />
               Edit profile
             </Link>
 
             <p className="text-sm text-zinc-400 mt-5">
-              Full Stack Developer | MERN Stack Developer
+              {user.bio}
             </p>
 
             <div className="mt-5 space-y-3 text-sm text-zinc-500">
               <div className="flex items-center gap-3">
                 <MapPin size={17} />
-                Lucknow, India
+                 {user.location}
               </div>
 
               <div className="flex items-center gap-3">
                 <Mail size={17} />
-                pari@example.com
+                {user.email}
               </div>
 
               <div className="flex items-center gap-3">
