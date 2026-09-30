@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { Code2, ArrowLeft, Camera, Save, AwardIcon } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 const EditProfile = () => {
+  const locations = useLocation();
+  const prevPath = locations.state?.from;
   const { user } = useAuth();
   const [name, setName] = useState(user.name ?? "");
   const [username, setUsername] = useState(user.username ?? "");
@@ -210,7 +212,7 @@ const EditProfile = () => {
 
           <div className="flex items-center justify-end gap-3 mt-6">
             <Link
-              to="/profile"
+              to={prevPath}
               className="px-5 py-2.5 border border-zinc-800 rounded-lg text-sm font-medium hover:bg-zinc-900 transition"
             >
               Cancel

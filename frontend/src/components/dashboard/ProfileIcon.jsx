@@ -46,7 +46,7 @@ export default function ProfileIcon() {
 
           <Link
             className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-zinc-300 hover:bg-zinc-900 cursor-pointer"
-            to={"/edit"}
+            to="/edit" state={{from:location.pathname}}
           >
             <UserRoundPen size={17} />
             Edit Profile

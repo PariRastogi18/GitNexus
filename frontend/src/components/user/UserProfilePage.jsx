@@ -91,7 +91,7 @@ const Profile = () => {
 
             <Link
               className="w-full mt-6 py-2.5 border border-zinc-700 rounded-lg text-sm font-semibold hover:bg-zinc-900 transition flex items-center justify-center gap-2"
-              to={"/edit"}
+              to="/edit" state={{from:location.pathname}}
             >
               <Edit size={16} />
               Edit profile

@@ -1,6 +1,9 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 export const EditRepository = () => {
+  const { id } = useParams();
+  const location = useLocation();
+  const prevPath = location.state?.from;
   const [repoName, setRepoName] = useState("currency-converter");
   const [description, setDescription] = useState(
     "A simple currency converter project developed by Pari.",
@@ -11,6 +14,7 @@ export const EditRepository = () => {
     e.preventDefault();
     const repoData = { repoName, description, visibility, issues };
     console.log(repoData);
+    console.log(id);
   };
   return (
     <div className="min-h-screen bg-black text-white">
@@ -21,7 +25,7 @@ export const EditRepository = () => {
         <div className="max-w-4xl mx-auto flex items-center justify-between">
           {" "}
           <Link
-            to="/allRepos"
+            to={prevPath}
             className="text-zinc-400 hover:text-pink-500 transition"
           >
             {" "}
@@ -170,7 +174,7 @@ export const EditRepository = () => {
             <div className="flex gap-3">
               {" "}
               <Link
-                to="/repositories"
+                to={prevPath}
                 className="px-5 py-2.5 border border-zinc-700 rounded-md text-sm hover:bg-zinc-900 transition"
               >
                 {" "}

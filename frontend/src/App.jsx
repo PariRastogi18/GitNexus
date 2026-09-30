@@ -62,7 +62,7 @@ function App() {
           }
         />
         <Route
-          path="/editRepo"
+          path="/editRepo/:id"
           element={
             <ProtectedRoute>
               < EditRepository/>

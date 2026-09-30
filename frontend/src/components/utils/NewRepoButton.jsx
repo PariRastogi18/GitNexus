@@ -4,9 +4,9 @@ import { Plus } from "lucide-react";
 
 export default function NewRepoButton() {
   return (
-    <Link to={"/new"}>
-    <button
-      className="
+    <Link to="/new" state={{ from: location.pathname }}>
+      <button
+        className="
               flex
               items-center
               justify-center
@@ -21,10 +21,10 @@ export default function NewRepoButton() {
               transition
               cursor-pointer
             "
-    >
-      <Plus size={18} />
-      New repository
-    </button>
+      >
+        <Plus size={18} />
+        New repository
+      </button>
     </Link>
   );
 }

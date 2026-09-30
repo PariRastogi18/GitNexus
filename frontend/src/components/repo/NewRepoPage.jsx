@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { Code2, ArrowLeft, Plus, Check } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import GitNexusIcon from "../dashboard/GitNexusIcon";
 import { useAuth } from "../context/AuthContext";
 
 const CreateRepository = () => {
+  const location = useLocation();
+  const prevPath = location.state?.from;
   const [repoName, setRepoName] = useState("");
   const [content, setContent] = useState("");
   const [description, setDescription] = useState("");
@@ -73,7 +75,7 @@ const CreateRepository = () => {
 
       <main className="max-w-3xl mx-auto px-5 py-10">
         <Link
-          to="/allRepos"
+          to={prevPath}
           className="inline-flex items-center gap-2 text-sm text-zinc-500 hover:text-white mb-7"
         >
           <ArrowLeft size={16} />
@@ -226,7 +228,7 @@ const CreateRepository = () => {
 
           <div className="flex items-center justify-end gap-3 mt-6">
             <Link
-              to="/allRepos"
+              to={prevPath}
               className="px-5 py-2.5 border border-zinc-800 rounded-lg text-sm font-medium hover:bg-zinc-900 transition"
             >
               Cancel

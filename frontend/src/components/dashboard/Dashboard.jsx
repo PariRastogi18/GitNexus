@@ -15,7 +15,7 @@ import {
   BookOpen,
   MoreHorizontal,
   UserRoundPen,
-  BookBookmark
+  BookBookmark,
 } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext.jsx";
@@ -113,10 +113,16 @@ const Dashboard = () => {
         </div>
 
         <div className="ml-auto flex items-center gap-4">
-          <Link className="hidden sm:block text-zinc-400 hover:text-white" to={"/allRepos"}>
-            <BookBookmark size={20}/>
+          <Link
+            className="hidden sm:block text-zinc-400 hover:text-white"
+            to={"/allRepos"}
+          >
+            <BookBookmark size={20} />
           </Link>
-          <Link className="hidden sm:block text-zinc-400 hover:text-white" to={"/allIssues"}>
+          <Link
+            className="hidden sm:block text-zinc-400 hover:text-white"
+            to={"/allIssues"}
+          >
             <CircleDot size={20} />
           </Link>
 
@@ -177,7 +183,7 @@ const Dashboard = () => {
                   Your latest projects
                 </p>
               </div>
-              <Link to={"/allRepos"}>
+              <Link to="/allRepos">
                 <button className="text-sm text-pink-500 hover:text-pink-400 cursor-pointer">
                   View all
                 </button>
@@ -307,7 +313,15 @@ const Stat = ({ icon, label, value }) => {
 
 /* ================= REPOSITORY ================= */
 
-const Repository = ({ _id, repoName, description, language, stars, forks, visibility }) => {
+const Repository = ({
+  _id,
+  repoName,
+  description,
+  language,
+  stars,
+  forks,
+  visibility,
+}) => {
   return (
     <div className="px-5 py-5 border-b border-zinc-800 last:border-b-0 hover:bg-zinc-950 transition">
       <div className="flex items-start justify-between gap-4">

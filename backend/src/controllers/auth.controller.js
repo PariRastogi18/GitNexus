@@ -191,6 +191,7 @@ export async function getMe(req, res) {
         location: userInfo.location,
         website: userInfo.website,
         profilePicture: userInfo.profilePicture,
+        repositories: userInfo.repositories,
       },
       message: "User found successfully",
     });
