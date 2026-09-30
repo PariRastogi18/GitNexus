@@ -249,7 +249,6 @@ const Dashboard = () => {
                   <div key={week} className="flex flex-col gap-1">
                     {Array.from({ length: 7 }).map((_, day) => {
                       const level = Math.floor(Math.random() * 5);
-
                       return (
                         <div
                           key={day}

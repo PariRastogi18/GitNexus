@@ -8,6 +8,7 @@ import Loading from "./components/utils/Loading.jsx";
 import ProtectedRoute from "./components/utils/ProtectedRoute.jsx";
 import AllRepoPage from "./components/Pages/AllRepoPage.jsx";
 import CreateRepository from "./components/repo/NewRepoPage.jsx";
+import {EditRepository} from "./components/repo/EditRepository.jsx";
 import Profile from "./components/user/UserProfilePage.jsx";
 import EditProfile from "./components/user/EditProfile.jsx";
 
@@ -57,6 +58,14 @@ function App() {
           element={
             <ProtectedRoute>
               <EditProfile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/editRepo"
+          element={
+            <ProtectedRoute>
+              < EditRepository/>
             </ProtectedRoute>
           }
         />
