@@ -1,20 +1,39 @@
 import React, { useState } from "react";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 export const EditRepository = () => {
+  const navigate = useNavigate();
   const { id } = useParams();
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
   const location = useLocation();
   const prevPath = location.state?.from;
-  const [repoName, setRepoName] = useState("currency-converter");
-  const [description, setDescription] = useState(
-    "A simple currency converter project developed by Pari.",
-  );
-  const [visibility, setVisibility] = useState("public");
-  const [issues, setIssues] = useState(true);
-  const handleSubmit = (e) => {
+  const [repoName, setRepoName] = useState("");
+  const [description, setDescription] = useState("");
+  const [visibility, setVisibility] = useState(true);
+  // const [issues, setIssues] = useState(true);
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const repoData = { repoName, description, visibility, issues };
+    const repoData = { repoName, description, visibility };
+    try {
+      const response = await fetch(`${BACKEND_URL}/repo/update/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(repoData),
+        credentials: "include",
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || "Server error occurred");
+      } else {
+        console.log("Success", data);
+      }
+    } catch (error) {
+      console.error("Repository update error: ", error.message);
+    }
     console.log(repoData);
     console.log(id);
+    navigate(`${prevPath}`);
   };
   return (
     <div className="min-h-screen bg-black text-white">
@@ -99,8 +118,8 @@ export const EditRepository = () => {
                 <input
                   type="radio"
                   name="visibility"
-                  value="public"
-                  checked={visibility === "public"}
+                  value={true}
+                  checked={visibility === true}
                   onChange={(e) => setVisibility(e.target.value)}
                   className="mt-1 accent-pink-500"
                 />{" "}
@@ -119,8 +138,8 @@ export const EditRepository = () => {
                 <input
                   type="radio"
                   name="visibility"
-                  value="private"
-                  checked={visibility === "private"}
+                  value={false}
+                  checked={visibility === false}
                   onChange={(e) => setVisibility(e.target.value)}
                   className="mt-1 accent-pink-500"
                 />{" "}
@@ -136,7 +155,7 @@ export const EditRepository = () => {
             </div>{" "}
           </div>{" "}
           {/* Issues */}{" "}
-          <div className="border border-zinc-800 rounded-lg p-6 mb-5">
+          {/* <div className="border border-zinc-800 rounded-lg p-6 mb-5">
             {" "}
             <div className="flex items-center justify-between">
               {" "}
@@ -159,7 +178,7 @@ export const EditRepository = () => {
                 ></span>{" "}
               </button>{" "}
             </div>{" "}
-          </div>{" "}
+          </div>{" "} */}
           {/* Save section */}{" "}
           <div className="border border-zinc-800 rounded-lg p-6 flex items-center justify-between">
             {" "}

@@ -4,6 +4,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { EditRepository } from "../repo/EditRepository";
 
 export default function FunctionButton({repoId}) {
+  const id = repoId;
   const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
