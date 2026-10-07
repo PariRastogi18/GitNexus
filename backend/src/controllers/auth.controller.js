@@ -74,7 +74,7 @@ export async function signup(req, res) {
       },
     );
 
-    res.cookie("refreshToken", refreshToken, getCookieOptions);
+    res.cookie("refreshToken", refreshToken, getCookieOptions());
 
     return res.status(httpStatus.OK).json({
       user: {
@@ -196,7 +196,7 @@ export async function getMe(req, res) {
       message: "User found successfully",
     });
   } catch (error) {
-    return res.status(httpOnly.INTERNAL_SERVER_ERROR).json({
+    return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
       message: error.message,
     });
   }

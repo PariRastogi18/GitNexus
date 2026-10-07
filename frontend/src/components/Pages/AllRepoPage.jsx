@@ -29,7 +29,6 @@ const AllRepoPage = () => {
     const fetchUserRepos = async () => {
       try {
         if (!user?.userId) return;
-
         const response = await fetch(`${BACKEND_URL}/repo/user/${user.userId}`);
         const data = await response.json();
         setRepositories(Array.isArray(data.userRepos) ? data.userRepos : []);

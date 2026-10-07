@@ -28,11 +28,8 @@ app.use(
 );
 app.use(express.json());
 app.use(cookieParser());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.urlencoded({ extended: true }));
-
-// app.get("/", (req, res) => {
-//   res.send("Welcome!");
-// });
 
 const PORT = config.PORT;
 
@@ -87,7 +84,7 @@ app.use("/api/auth", mainRouter);
 
 function start() {
   connectDB();
-  const user = "test";
+  const user = "";
   const httpServer = http.createServer(app);
   const io = new Server(httpServer, {
     cors: {
